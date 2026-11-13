@@ -45,7 +45,7 @@ function say(t, test) {
   if (test) { u.onstart = () => status("Spoken tips on."); if (!v.length) status("No speech voices found on this device/browser, so spoken tips cannot play. Try Chrome or Edge, or install a text-to-speech voice in your system settings.", "fix"); }
   speechSynthesis.cancel(); speechSynthesis.resume(); speechSynthesis.speak(u);
 }
-const setBest = (l, v) => { const e = document.querySelector(`[data-best="${l}"]`); if (e) e.textContent = v.toFixed(1) + "s"; if (l === target) $("best").textContent = v.toFixed(1); };
+const setBest = (l, v) => { if (l === target) $("best").textContent = v.toFixed(1); };
 
 async function loadAI() {
   try {
@@ -53,8 +53,8 @@ async function loadAI() {
     [labels, ideal] = await Promise.all([j("labels.json"), j("ideal.json")]);
     model = await tf.loadLayersModel("model/model.json");
     model.predict(tf.zeros([1, T, model.inputs[0].shape[2]])).dispose();   // warm-up
-    labels.forEach(l => { const b = document.createElement("button"); b.className = "pose"; b.type = "button"; b.setAttribute("role", "radio");
-      b.innerHTML = `<svg viewBox="0 0 48 48" aria-hidden="true">${GLYPH[l] || GLYPH_FALLBACK}</svg><span class="nm">${pretty(l)}</span><small data-best="${l}" title="Best hold">${store("best-" + l).toFixed(1)}s</small>`; b.dataset.id = l; b.onclick = () => select(l); $("poses").append(b); });
+    labels.forEach(l => $("poses").append(new Option(pretty(l), l)));
+    $("poses").onchange = e => select(e.target.value);
     select(labels[0]); $("start").disabled = false; $("start").textContent = "Start camera"; status("AI model ready. Start the camera.");
   } catch (e) {
     status("Trained model not found (" + e.message + "). Train it first, see README."); $("start").textContent = "Model missing";
@@ -62,7 +62,7 @@ async function loadAI() {
 }
 function select(l) {
   target = l; holdStart = null;
-  document.querySelectorAll("#poses button").forEach(b => b.setAttribute("aria-checked", b.dataset.id === l));
+  $("poses").value = l; $("poseGlyph").innerHTML = GLYPH[l] || GLYPH_FALLBACK;
   $("tip").textContent = HINT[l] || "Hold " + pretty(l) + " and the coach will score how closely you match it.";
   $("pct").textContent = "0"; $("ring").style.setProperty("--p", 0); $("ring").setAttribute("aria-valuenow", 0);
   if (landmarker) $("detected").textContent = "Waiting for you";

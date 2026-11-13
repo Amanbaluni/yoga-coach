@@ -57,7 +57,10 @@
   <aside class="side">
     <section class="block b-pose" aria-labelledby="h-pose">
       <h2 id="h-pose">Pose</h2>
-      <div id="poses" class="poses" role="radiogroup" aria-labelledby="h-pose"></div>
+      <div class="picker">
+        <svg id="poseGlyph" viewBox="0 0 48 48" aria-hidden="true"></svg>
+        <div class="sel"><select id="poses" aria-labelledby="h-pose"></select></div>
+      </div>
       <p id="tip" class="tip"></p>
     </section>
 
