@@ -131,6 +131,18 @@ h2{margin:0 0 12px;font:600 1.1rem/1.2 var(--display);letter-spacing:-.005em}
   .pose[aria-checked=true]{border-color:var(--mat)}
   .tip{max-width:none}
 }
+/* Live mode on phones: camera pinned at the top, coach tips right under it, the rest below. Nothing to scroll while you practise. */
+@media (max-width:900px){
+  body[data-live] .stage{position:sticky;top:0;z-index:5;background:var(--ground);padding-bottom:8px;box-shadow:0 8px 12px -8px rgba(0,0,0,.25)}
+  body[data-live] .frame{width:min(100%,calc(52svh*var(--ar-n,1.333)))}
+  body[data-live] .side{display:flex;flex-direction:column}
+  body[data-live] .b-coach{order:1}
+  body[data-live] .b-match{order:2}
+  body[data-live] .b-pose{order:3}
+  body[data-live] .b-coach{padding-bottom:16px}
+  body[data-live] .checks li:nth-child(n+3){display:none}
+  body[data-live] .bar{display:none}
+}
 @media (max-width:520px){
   .frame:has(.intro:not([hidden])){aspect-ratio:auto;min-height:min(86svh,520px)}
   .block{padding:18px}
@@ -143,7 +155,15 @@ h2{margin:0 0 12px;font:600 1.1rem/1.2 var(--display);letter-spacing:-.005em}
   .how{font-size:.92rem;margin-bottom:18px}
   .primary{width:100%}
 }
+/* phone held sideways: camera left, controls right, all on one screen */
 @media (max-height:520px) and (orientation:landscape){
-  .frame{width:min(100%,calc(100svh*var(--ar-n,1.333)))}
+  main{grid-template-columns:minmax(0,1fr) minmax(260px,320px);gap:12px;padding:0 12px 0 0;align-items:start}
+  .bar{display:none}
+  .stage,body[data-live] .stage{position:sticky;top:0;padding:0;box-shadow:none;background:none}
+  .frame,body[data-live] .frame{width:min(100%,calc(100svh*var(--ar-n,1.333)));border-radius:0 0 16px 0}
+  .frame:has(.intro:not([hidden])){min-height:0;aspect-ratio:var(--ar)}
+  .side,body[data-live] .side{margin:8px 0;max-height:calc(100svh - 16px);overflow-y:auto}
+  .intro h1{font-size:1.3rem;margin-bottom:8px}.how{display:none}.intro{align-items:center}
+  .foot{display:none}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}

@@ -145,7 +145,7 @@ $("start").onclick = async () => {
     await video.play(); canvas.width = video.videoWidth; canvas.height = video.videoHeight;
     const fr = $("frame").style, ar = video.videoWidth / video.videoHeight;   // match the stage to the real camera shape (portrait phones too)
     fr.setProperty("--ar", ar); fr.setProperty("--ar-n", ar);
-    $("intro").hidden = true; $("stop").hidden = false; status("Get into position.");
+    $("intro").hidden = true; $("stop").hidden = false; document.body.dataset.live = "1"; status("Get into position.");
     running = true; lastT = -1; loop();
   } catch (e) { btn.disabled = false; status(e.name === "NotAllowedError" ? "Camera blocked. Allow camera access and try again." : "Could not start: " + e.message); }
 };
@@ -153,7 +153,7 @@ $("stop").onclick = () => {
   running = false; stream?.getTracks().forEach(t => t.stop()); video.srcObject = null; stream = null;
   ctx.clearRect(0, 0, canvas.width, canvas.height); buf = []; recent = []; holdStart = null; speechSynthesis?.cancel();
   $("hold").textContent = "0.0"; $("pct").textContent = "0"; $("ring").style.setProperty("--p", 0); rows([]);
-  $("detected").textContent = "Waiting for you"; $("stop").hidden = true; $("intro").hidden = false;
+  $("detected").textContent = "Waiting for you"; $("stop").hidden = true; $("intro").hidden = false; delete document.body.dataset.live;
   $("start").disabled = false; $("start").textContent = "Start camera"; status("Camera off. Start it when you are ready.");
 };
 $("voice").onchange = () => { lastSpoken = 0; lastMsg = ""; if ($("voice").checked) { say("Spoken tips on", true); } else speechSynthesis.cancel(); };
