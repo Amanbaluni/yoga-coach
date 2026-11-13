@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#e6eae5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0c1311" media="(prefers-color-scheme: dark)">
+<meta name="description" content="Practise yoga poses in front of your camera and get live corrections. Runs entirely in your browser.">
+<title>Pose Coach</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23245c4e'/%3E%3Ccircle cx='16' cy='8' r='3' fill='%23fff'/%3E%3Cpath d='M16 12v8m0 0-5 7m5-7 5 7M8 15c5 2.5 11 2.5 16 0' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="bar">
+  <a class="brand" href="./" aria-label="Pose Coach home">
+    <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><rect width="32" height="32" rx="9" fill="currentColor"/><circle cx="16" cy="8" r="3" fill="var(--surface)"/><path d="M16 12v8m0 0-5 7m5-7 5 7M8 15c5 2.5 11 2.5 16 0" fill="none" stroke="var(--surface)" stroke-width="2.2" stroke-linecap="round"/></svg>
+    <span>Pose Coach</span>
+  </a>
+  <label class="switch">
+    <input type="checkbox" id="voice" role="switch">
+    <i aria-hidden="true"></i>
+    <span>Spoken tips</span>
+  </label>
+</header>
+
+<main>
+  <section class="stage" aria-label="Camera">
+    <div class="frame" id="frame">
+      <video id="video" playsinline muted></video>
+      <canvas id="overlay"></canvas>
+
+      <div class="hud">
+        <div class="timer" aria-hidden="true"><span class="lab">Hold</span><b id="hold">0.0</b><span class="u">s</span></div>
+        <button id="stop" class="end" type="button" hidden>End session</button>
+      </div>
+
+      <div id="intro" class="intro">
+        <div class="intro-in">
+          <h1>Check your pose while you hold it</h1>
+          <ul class="how">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M7 8l5-5 5 5M7 16l5 5 5-5"/></svg>Place your camera about 2 m away, so your whole body is in view</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>Face a window or lamp, not the light behind you</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Video is analysed on this device and never uploaded</li>
+          </ul>
+          <button id="start" class="primary" type="button" disabled>Loading AI model…</button>
+        </div>
+      </div>
+
+      <div id="status" class="status" role="status" aria-live="polite">Loading…</div>
+    </div>
+  </section>
+
+  <aside class="side">
+    <section class="block" aria-labelledby="h-pose">
+      <h2 id="h-pose">Pose</h2>
+      <div id="poses" class="poses" role="radiogroup" aria-labelledby="h-pose"></div>
+      <p id="tip" class="tip"></p>
+    </section>
+
+    <section class="block" aria-labelledby="h-match">
+      <h2 id="h-match">Match</h2>
+      <div class="match">
+        <div class="num"><span id="pct">0</span><small>%</small></div>
+        <div class="meter" id="ring" role="meter" aria-labelledby="h-match" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <i></i><em aria-hidden="true"></em>
+        </div>
+      </div>
+      <p class="meta" id="detected">Waiting for you</p>
+      <p class="meta">Best hold <b id="best">0.0</b> s</p>
+    </section>
+
+    <section class="block" aria-labelledby="h-coach">
+      <h2 id="h-coach">Coach says</h2>
+      <ul id="checks" class="checks" aria-live="polite"></ul>
+    </section>
+  </aside>
+</main>
+
+<footer class="foot">Not medical advice. Stop if anything hurts.</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>
